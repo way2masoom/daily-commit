@@ -1,0 +1,30 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update file
+        run: |
+          echo "Last update: $(date)" > activity.txt
+
+      - name: Commit and Push
+        run: |
+          git config user.name "way2masoom"
+          git config user.email "way2masoom@users.noreply.github.com"
+
+          git add activity.txt
+          git commit -m "Daily commit $(date)" || exit 0
+          git push
